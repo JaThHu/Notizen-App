@@ -1,7 +1,7 @@
 [build]
   base = "notizen-app"
   command = "next build"
-  publish = ".next"
+  publish = ".next/standalone"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
@@ -10,6 +10,16 @@
   directory = "netlify/functions"
   external_node_modules = ["@prisma/client"]
   node_bundler = "esbuild"
+
+# Next.js spezifische Einstellungen
+[build.environment]
+  NEXT_PRIVATE_TARGET = "server"
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/_next/static/*"
+  to = "/static/:splat"
+  status = 200
 
 [[redirects]]
   from = "/api/*"

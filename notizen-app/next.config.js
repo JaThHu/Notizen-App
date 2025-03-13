@@ -4,7 +4,7 @@ const nextConfig = {
     unoptimized: true,
   },
   // Netlify spezifische Konfiguration
-  target: "serverless",
+  output: "standalone",
 };
 
 module.exports = nextConfig;
