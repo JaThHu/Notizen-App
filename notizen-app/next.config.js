@@ -3,8 +3,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Netlify spezifische Konfiguration
-  output: "standalone",
   // ESLint-Konfiguration für Production Builds
   eslint: {
     // Warnungen im Produktions-Build ignorieren
@@ -14,6 +12,10 @@ const nextConfig = {
     // TypeScript-Fehler im Produktions-Build ignorieren
     ignoreBuildErrors: true,
   },
+  // Build-Output-Konfiguration
+  distDir: ".next",
+  // Netlify-spezifische Konfiguration
+  trailingSlash: true,
 };
 
 module.exports = nextConfig;
