@@ -1,7 +1,7 @@
 [build]
   base = "notizen-app"
   command = "npm run build"
-  publish = "out"
+  publish = ".next"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
@@ -10,6 +10,7 @@
   directory = "netlify/functions"
   external_node_modules = ["@prisma/client"]
   node_bundler = "esbuild"
+  included_files = ["next.config.js"]
 
 # Next.js spezifische Einstellungen
 [build.environment]
@@ -17,19 +18,36 @@
   NODE_VERSION = "18"
   NEXT_PRIVATE_TARGET = "server"
 
-# Next.js spezifische Redirects
-[[redirects]]
-  from = "/_next/*"
-  to = "/_next/*"
-  status = 200
+# Sicherheitsheader
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
 
+# Cache-Kontrolle für statische Assets
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Next.js API Routes
 [[redirects]]
   from = "/api/*"
-  to = "/api/*"
+  to = "/.netlify/functions/nextjs-server/api/:splat"
+  status = 200
+  force = true
+
+# Next.js Pages
+[[redirects]]
+  from = "/_next/static/*"
+  to = "/_next/static/*"
   status = 200
 
 # Fallback für Client-side Routing
 [[redirects]]
   from = "/*"
-  to = "/200.html"
+  to = "/.netlify/functions/nextjs-server/:splat"
   status = 200 
