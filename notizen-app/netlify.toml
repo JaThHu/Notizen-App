@@ -1,7 +1,7 @@
 [build]
   base = "notizen-app"
   command = "npm run build"
-  publish = ".next"
+  publish = "out"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
@@ -15,19 +15,21 @@
 [build.environment]
   NEXT_USE_NETLIFY_EDGE = "true"
   NODE_VERSION = "18"
+  NEXT_PRIVATE_TARGET = "server"
 
+# Next.js spezifische Redirects
 [[redirects]]
-  from = "/_next/static/*"
-  to = "/static/:splat"
+  from = "/_next/*"
+  to = "/_next/*"
   status = 200
 
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
+  to = "/api/*"
   status = 200
 
+# Fallback für Client-side Routing
 [[redirects]]
   from = "/*"
-  to = "/index.html"
-  status = 200
-  force = false 
+  to = "/200.html"
+  status = 200 

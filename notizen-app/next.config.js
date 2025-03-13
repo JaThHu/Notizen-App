@@ -16,6 +16,12 @@ const nextConfig = {
   distDir: ".next",
   // Netlify-spezifische Konfiguration
   trailingSlash: true,
+  // Aktiviere statische Exports für Netlify
+  output: "export",
+  // Deaktiviere Serverless Functions für statischen Export
+  experimental: {
+    appDir: true,
+  },
 };
 
 module.exports = nextConfig;
