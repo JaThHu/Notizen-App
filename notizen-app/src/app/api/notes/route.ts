@@ -5,7 +5,7 @@ import Note from "@/models/Note";
 import { authOptions } from "../auth/[...nextauth]/route";
 
 // GET /api/notes - Alle Notizen abrufen
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
 

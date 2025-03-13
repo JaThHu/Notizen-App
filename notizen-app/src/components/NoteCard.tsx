@@ -21,7 +21,6 @@ interface NoteProps {
   completed: boolean;
   likes: string[];
   createdAt: string;
-  updatedAt: string;
   onDelete: (id: string) => void;
   onToggleComplete: (id: string, completed: boolean) => void;
   onToggleLike: (id: string) => void;
@@ -36,7 +35,6 @@ const NoteCard: React.FC<NoteProps> = ({
   completed,
   likes,
   createdAt,
-  updatedAt,
   onDelete,
   onToggleComplete,
   onToggleLike,

@@ -6,6 +6,13 @@ import Comment from "@/models/Comment";
 import mongoose from "mongoose";
 import { authOptions } from "../../auth/[...nextauth]/route";
 
+// Interface für die Update-Daten
+interface NoteUpdateData {
+  title?: string;
+  content?: string;
+  completed?: boolean;
+}
+
 // GET /api/notes/[id] - Eine bestimmte Notiz abrufen
 export async function GET(
   req: NextRequest,
@@ -162,8 +169,8 @@ export async function PATCH(
       );
     }
 
-    // Aktualisierbare Felder
-    const updateData: any = {};
+    // Aktualisierbare Felder mit spezifischem Typ
+    const updateData: NoteUpdateData = {};
 
     if (title !== undefined) updateData.title = title;
     if (content !== undefined) updateData.content = content;
