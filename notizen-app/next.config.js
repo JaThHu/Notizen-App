@@ -1,9 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
   images: {
     unoptimized: true,
   },
+  // Netlify spezifische Konfiguration
+  target: "serverless",
 };
 
 module.exports = nextConfig;

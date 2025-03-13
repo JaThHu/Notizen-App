@@ -1,8 +1,23 @@
 [build]
-  command = "npm run build"
-  publish = "out"
+  base = "notizen-app"
+  command = "next build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[functions]
+  directory = "netlify/functions"
+  external_node_modules = ["@prisma/client"]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
-  status = 200 
+  status = 200
+  force = false 
