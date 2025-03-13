@@ -171,22 +171,33 @@ export default function Dashboard() {
 
   const handleToggleLike = async (id: string) => {
     try {
+      console.log("Versuche Notiz zu liken/unliken mit ID:", id);
+
       const response = await fetch(`/api/notes/${id}/like`, {
         method: "PATCH",
       });
 
       if (!response.ok) {
-        throw new Error("Fehler beim Liken der Notiz");
+        const errorData = await response.json();
+        console.error("Server-Fehler beim Liken:", {
+          status: response.status,
+          statusText: response.statusText,
+          data: errorData,
+        });
+        throw new Error(errorData.error || "Fehler beim Liken der Notiz");
       }
 
       const updatedNote = await response.json();
+      console.log("Aktualisierte Notiz nach Like/Unlike:", updatedNote);
 
       setNotes((prevNotes) =>
         prevNotes.map((note) => (note._id === id ? updatedNote : note))
       );
     } catch (err) {
-      console.error("Fehler beim Liken der Notiz:", err);
-      alert("Fehler beim Liken der Notiz. Bitte versuche es erneut.");
+      console.error("Detaillierter Fehler beim Liken der Notiz:", err);
+      setError(
+        err instanceof Error ? err.message : "Fehler beim Liken der Notiz"
+      );
     }
   };
 
@@ -292,8 +303,6 @@ export default function Dashboard() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
       <div className="md:col-span-2">
-        <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
-
         {error && (
           <div className="bg-red-50 text-red-600 p-4 rounded mb-6">{error}</div>
         )}
@@ -304,7 +313,7 @@ export default function Dashboard() {
           <h2 className="text-xl font-semibold mb-4">Deine Notizen</h2>
 
           {notes.length === 0 ? (
-            <p className="text-gray-500">
+            <p className="text-gray-400">
               Noch keine Notizen vorhanden. Erstelle deine erste Notiz!
             </p>
           ) : (
@@ -328,7 +337,7 @@ export default function Dashboard() {
         {selectedNote ? (
           <div className="bg-white rounded-lg shadow p-6 sticky top-8">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Kommentare</h2>
+              <h2 className="text-black text-xl font-semibold">Kommentare</h2>
               <Button
                 variant="secondary"
                 size="sm"
@@ -354,8 +363,10 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="bg-white rounded-lg shadow p-6 sticky top-8">
-            <h2 className="text-xl font-semibold mb-4">Kommentare</h2>
-            <p className="text-gray-500">
+            <h2 className="text-black text-xl font-semibold mb-4">
+              Kommentare
+            </h2>
+            <p className="text-black">
               Wähle eine Notiz aus, um Kommentare anzuzeigen oder hinzuzufügen.
             </p>
           </div>

@@ -10,26 +10,26 @@ const Header: React.FC = () => {
   const isAuthenticated = status === "authenticated";
 
   return (
-    <header className="bg-white shadow">
+    <header className=" shadow">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
               <Link href="/" className="text-xl font-bold text-blue-600">
-                Notizen-App
+                Nothizen
               </Link>
             </div>
             <nav className="ml-6 flex items-center space-x-4">
               <Link
                 href="/"
-                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md"
+                className="text-gray-400 hover:text-blue-600 px-3 py-2 rounded-md"
               >
                 Startseite
               </Link>
               {isAuthenticated && (
                 <Link
                   href="/dashboard"
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md"
+                  className="text-gray-400 hover:text-blue-600 px-3 py-2 rounded-md"
                 >
                   Dashboard
                 </Link>
@@ -39,7 +39,7 @@ const Header: React.FC = () => {
           <div className="flex items-center">
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
-                <span className="text-gray-700">
+                <span className="text-gray-400">
                   Hallo, {session.user.name}
                 </span>
                 <Button

@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { connectToDatabase } from "@/utils/mongodb";
 import Note from "@/models/Note";
 import mongoose from "mongoose";
+import { authOptions } from "../../../auth/[...nextauth]/route";
 
 // PATCH /api/notes/[id]/like - Eine Notiz liken oder Unlike
 export async function PATCH(
@@ -10,7 +11,7 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
 
     if (!session?.user) {
       return NextResponse.json({ error: "Nicht autorisiert" }, { status: 401 });
@@ -38,8 +39,12 @@ export async function PATCH(
 
     const userId = session.user.id;
 
+    console.log("Like/Unlike: User ID:", userId);
+    console.log("Aktuelle Likes:", note.likes);
+
     // Prüfen, ob der Benutzer die Notiz bereits geliked hat
     const isLiked = note.likes.includes(userId);
+    console.log("Ist geliked:", isLiked);
 
     let updatedNote;
 
@@ -58,6 +63,8 @@ export async function PATCH(
         { new: true }
       ).populate("author", "name email image");
     }
+
+    console.log("Aktualisierte Likes:", updatedNote.likes);
 
     return NextResponse.json(updatedNote);
   } catch (error) {

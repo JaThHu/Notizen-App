@@ -46,7 +46,17 @@ const NoteCard: React.FC<NoteProps> = ({
   const [isExpanded, setIsExpanded] = useState(false);
 
   const isAuthor = session?.user?.id === author._id;
-  const isLiked = likes.includes(session?.user?.id || "");
+
+  // Verbesserter Vergleich zur Überprüfung des Like-Status
+  const userId = session?.user?.id;
+  const isLiked = userId
+    ? likes.some((id) => id.toString() === userId.toString())
+    : false;
+
+  console.log("User ID:", userId);
+  console.log("Likes:", likes);
+  console.log("Is Liked:", isLiked);
+
   const likeCount = likes.length;
 
   const formattedDate = formatDistanceToNow(new Date(createdAt), {
@@ -62,17 +72,17 @@ const NoteCard: React.FC<NoteProps> = ({
     >
       <div className="flex justify-between items-start">
         <h3
-          className={`text-lg font-semibold ${
-            completed ? "line-through text-gray-500" : ""
+          className={`text-lg font-semibold text-black ${
+            completed ? "line-through text-black" : ""
           }`}
         >
           {title}
         </h3>
-        <div className="flex space-x-2">
+        <div className="flex items-center space-x-2">
           <button
             onClick={() => onToggleComplete(_id, !completed)}
             className={`p-1 rounded ${
-              completed ? "text-green-600" : "text-gray-500"
+              completed ? "text-green-600" : "text-black"
             }`}
             title={
               completed ? "Als unerledigt markieren" : "Als erledigt markieren"
@@ -95,9 +105,7 @@ const NoteCard: React.FC<NoteProps> = ({
           </button>
           <button
             onClick={() => onToggleLike(_id)}
-            className={`p-1 rounded ${
-              isLiked ? "text-red-600" : "text-gray-500"
-            }`}
+            className={`p-1 rounded ${isLiked ? "text-red-600" : "text-black"}`}
             title={isLiked ? "Like entfernen" : "Liken"}
           >
             <svg
@@ -118,7 +126,7 @@ const NoteCard: React.FC<NoteProps> = ({
           {isAuthor && (
             <button
               onClick={() => onDelete(_id)}
-              className="p-1 rounded text-gray-500 hover:text-red-600"
+              className="p-1 rounded text-black hover:text-red-600"
               title="Löschen"
             >
               <svg
@@ -141,7 +149,7 @@ const NoteCard: React.FC<NoteProps> = ({
       </div>
 
       <div className="mt-2">
-        <p className={`text-gray-700 ${isExpanded ? "" : "line-clamp-3"}`}>
+        <p className={`text-black ${isExpanded ? "" : "line-clamp-3"}`}>
           {content}
         </p>
         {content.length > 150 && (
@@ -154,7 +162,7 @@ const NoteCard: React.FC<NoteProps> = ({
         )}
       </div>
 
-      <div className="mt-4 flex justify-between items-center text-sm text-gray-500">
+      <div className="mt-4 flex justify-between items-center text-sm text-black">
         <div>
           <span>
             Von {author.name} • {formattedDate}

@@ -7,7 +7,7 @@ import Header from "@/components/Header";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Notizen-App",
+  title: "Nothizen",
   description: "Eine App zum Erstellen und Verwalten von Notizen",
 };
 
