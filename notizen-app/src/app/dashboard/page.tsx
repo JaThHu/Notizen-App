@@ -301,77 +301,51 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div className="md:col-span-2">
-        {error && (
-          <div className="bg-red-50 text-red-600 p-4 rounded mb-6">{error}</div>
-        )}
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8">Meine Notizen</h1>
 
-        <CreateNoteForm onSubmit={handleCreateNote} />
+      <CreateNoteForm onSubmit={handleCreateNote} />
 
-        <div className="mt-8">
-          <h2 className="text-xl font-semibold mb-4">Deine Notizen</h2>
-
-          {notes.length === 0 ? (
-            <p className="text-gray-400">
-              Noch keine Notizen vorhanden. Erstelle deine erste Notiz!
-            </p>
-          ) : (
-            <div className="space-y-4">
-              {notes.map((note) => (
-                <NoteCard
-                  key={note._id}
-                  {...note}
-                  onDelete={handleDeleteNote}
-                  onToggleComplete={handleToggleComplete}
-                  onToggleLike={handleToggleLike}
-                  onViewComments={handleViewComments}
-                />
-              ))}
-            </div>
-          )}
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {error}
         </div>
-      </div>
+      )}
 
-      <div className="md:col-span-1">
-        {selectedNote ? (
-          <div className="bg-white rounded-lg shadow p-6 sticky top-8">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-black text-xl font-semibold">Kommentare</h2>
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => {
-                  setSelectedNote(null);
-                  setComments([]);
-                }}
-              >
-                Schließen
-              </Button>
-            </div>
+      {loading ? (
+        <div className="text-center py-8">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+        </div>
+      ) : notes.length === 0 ? (
+        <div className="text-center py-8 bg-gray-50 rounded-lg">
+          <p className="text-gray-600 mb-4">Noch keine Notizen vorhanden.</p>
+          <p className="text-gray-500">Erstelle deine erste Notiz oben!</p>
+        </div>
+      ) : (
+        <div className="grid gap-6">
+          {notes.map((note) => (
+            <NoteCard
+              key={note._id}
+              {...note}
+              onDelete={handleDeleteNote}
+              onToggleComplete={handleToggleComplete}
+              onToggleLike={handleToggleLike}
+              onViewComments={handleViewComments}
+            />
+          ))}
+        </div>
+      )}
 
-            {loadingComments ? (
-              <p className="text-center py-4">Kommentare werden geladen...</p>
-            ) : (
-              <CommentSection
-                noteId={selectedNote}
-                comments={comments}
-                onAddComment={handleAddComment}
-                onDeleteComment={handleDeleteComment}
-              />
-            )}
-          </div>
-        ) : (
-          <div className="bg-white rounded-lg shadow p-6 sticky top-8">
-            <h2 className="text-black text-xl font-semibold mb-4">
-              Kommentare
-            </h2>
-            <p className="text-black">
-              Wähle eine Notiz aus, um Kommentare anzuzeigen oder hinzuzufügen.
-            </p>
-          </div>
-        )}
-      </div>
+      {selectedNote && (
+        <div className="mt-8">
+          <CommentSection
+            noteId={selectedNote}
+            comments={comments}
+            loading={loadingComments}
+            onAddComment={handleAddComment}
+          />
+        </div>
+      )}
     </div>
   );
 }
